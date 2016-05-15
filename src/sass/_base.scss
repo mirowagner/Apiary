@@ -1,0 +1,80 @@
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Typography
+body {
+  font-family: 'Bitter', serif;
+  font-size: $ms-base;
+  line-height: $ms-ratio;
+  font-weight: 400;
+  min-height: calc(100vh + 1px);
+
+  background: $body-background;
+  color: $body-text-color;
+}
+
+p {
+  margin-bottom: ms(0);
+}
+
+h1,
+h2,
+h3 {
+  margin-bottom: ms(1);
+  font-weight: 700;
+  letter-spacing: rem(1);
+}
+
+h1 {
+  font-size: ms(3);
+}
+
+h2 {
+  font-size: ms(2);
+}
+
+h3 {
+  font-size: ms(1);
+}
+
+h4 {
+  font-size: ms(0);
+  margin-bottom: ms(-2);
+  text-decoration: underline;
+}
+
+ol,
+ul {
+  list-style-position: inside;
+  margin-bottom: ms(0);
+}
+
+ul {
+  list-style-type: square;
+}
+
+hr {
+  margin: ms(2) 0;
+  width: 100%;
+
+  border: none;
+  border-bottom: rem(1) solid $hr-color;
+}
+
+a {
+  color: $link-text-color;
+
+  &:hover {
+    color: $link-text-color-hover;
+    background: $link-background-hover;
+  }
+}
+
+&::selection {
+  color: $body-text-color-selected;
+  background: $body-text-background-selected;
+}

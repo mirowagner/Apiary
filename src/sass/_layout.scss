@@ -1,0 +1,114 @@
+// Main layout
+
+.row {
+  display: flex;
+  max-width: $content-max-width;
+  flex-grow: 1;
+
+  &--center {
+    justify-content: center;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+
+  &--center {
+    align-items: center;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+}
+
+.spacer {
+  display: flex;
+  flex-grow: 1;
+}
+
+.section {
+  margin: ms(2) 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+
+  &__site-title {
+    margin: 0;
+    line-height: 1;
+    color: $site-title-text-color;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .header__site-title {
+    font-size: 13.9vw;
+  }
+}
+
+.container {
+  max-width: $content-max-width;
+  margin: 0 auto;
+  padding: 0 ms(1) ms(1);
+}
+
+.button {
+  display: block;
+  line-height: ms(2);
+  padding: 0 ms(-1);
+
+  background: $button-background;
+  text-align: center;
+  text-decoration: none;
+  color: $button-text-color;
+  border: rem(2) solid $button-border-color;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    color: $button-text-color-hover;
+    background: $button-background-hover;
+  }
+}
+
+.honeycomb {
+  max-width: 400px;
+
+  &__foreground {
+    fill: $button-background;
+    mix-blend-mode: multiply;
+    cursor: pointer;
+    stroke: $button-border-color;
+    stroke-width: rem(3);
+
+    &:hover {
+      fill: $button-background-hover;
+    }
+  }
+
+  &__background {
+    fill: white;
+  }
+
+  &__input {
+    height: 100%;
+    width: 100%;
+    font-family: Bitter;
+    font-size: ms(3);
+    outline: 0;
+    color: $cell-text-color;
+
+    border: none;
+    background: none;
+    text-align: center;
+    text-transform: uppercase;
+
+    &::selection {
+      background: none;
+      color: $cell-text-color-selected;
+    }
+  }
+}
