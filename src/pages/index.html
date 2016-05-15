@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Apiary</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+    <script src="vue.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body id="apiary" class="body">
+
+    <div class="container">
+
+      <header class="section header">
+        <h1 class="header__site-title">Apiary</h1>
+        <div class="spacer"></div>
+        <a v-on:click="toggleVisible('help', $event)" class="button" href="#">Help</a>
+      </header>
+
+      <section class="section help" v-show="visible.help">
+        <h3>About:</h3>
+        <p>
+          Apiary generates and solves the Spelling Bee word puzzle. Spelling Bee was created by Frank Longo and appears weekly in <cite><a href="http://www.nytimes.com/section/magazine">The New York Times Magazine</a></cite> (Apiary is not affiliated with either).
+        </p>
+        <p>
+          Apiary is in beta. Not all features have been implemented and there are some bugs.
+        </p>
+        <hr>
+        <h3>Usage:</h3>
+        <p>
+          Change any cell in the honeycomb simply by clicking on it and typing a new letter. The list of words updates automatically.
+        </p>
+        <p>
+          An option to create a new puzzle from random letters is currently being developed.
+        </p>
+        <hr>
+        <h3>The Rules:</h3>
+        <p>
+          The objective of Spelling Bee is to make as many words as possible from the letters in the honeycomb.
+        </p>
+        <h4>A valid word:</h4>
+        <ul>
+          <li>Is at least five letters long.</li>
+          <li>Only includes letters in the honeycomb.</li>
+          <li>Must include the centre letter.</li>
+          <li>May include each letter any number of times.</li>
+        </ul>
+        <h4>Scoring:</h4>
+        <ul>
+          <li>A word which includes all seven unique letters is worth three points.</li>
+          <li>All other words are worth one point.</li>
+        </ul>
+        <hr>
+
+      </section>
+
+      <section class="section column column--center">
+
+        <svg
+          class="honeycomb"
+          viewbox="0 0 {{ cell.width * 2.5 }} {{ cell.height * 3 }}"
+        >
+
+          <svg
+            v-for="input in cell.inputs"
+            x="{{ input.x * 0.75 * cell.width }}"
+            y="{{ input.y * 0.5 * cell.height }}"
+            width="{{ cell.width }}"
+            height="{{ cell.height }}"
+            viewbox="0 0 {{ cell.width }} {{ cell.height }}"
+          >
+
+            <polygon
+              class="honeycomb__background"
+              points="{{ cell.points }}"
+            >
+            </polygon>
+
+            <foreignObject width="50%" height="40%" x="25%" y="30%">
+
+              <input
+                v-model="input.letter"
+                v-on:input="enterLetter($index, $event)"
+                class="honeycomb__input js-select-input"
+                maxlength="1"
+                type="text">
+
+            </foreignObject>
+
+            <polygon
+              v-on:click="selectInput($index, $event)"
+              class="honeycomb__foreground"
+              points="{{ cell.points }}"
+            >
+            </polygon>
+
+          </svg>
+
+        </svg>
+
+      </section>
+
+      <hr>
+
+      <section class="section results">
+
+        <a class="button" v-on:click="toggleVisible('results', $event)" class="row row--center" href="#">
+            <span v-if="!visible.results">Show</span>
+            <span v-else>Hide</span>
+            <span> words ({{ results.onePoint.words.length + (results.threePoint.words.length * 3 )}} points)</span>
+        </a>
+
+        <div v-if="visible.results" class="results__groups">
+
+          <div v-for="group in results" v-if="group.words.length" class="section">
+            <h4>{{ group.heading }}</h4>
+            <span v-for="word in group.words">{{ word }}<span v-if="group.words[($index + 1)]">, </span><span v-else>.</span></span>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <script src="scripts.js"></script>
+
+    <script>
+
+      var apiary = new Vue({
+        el: '#apiary',
+        data: {
+          cell: {
+            width: 220,
+            height: 194,
+            points: '160,10 60,10 10,97 60,184 160,184 210,97',
+            inputs: [
+              { x: 1, y: 2 , letter: 'l' },
+              { x: 1, y: 0 , letter: 'a' },
+              { x: 2, y: 1 , letter: 'c' },
+              { x: 2, y: 3 , letter: 'e' },
+              { x: 1, y: 4 , letter: 'n' },
+              { x: 0, y: 3 , letter: 'o' },
+              { x: 0, y: 1 , letter: 'w' }
+            ]
+          },
+          visible: {
+            help: false,
+            results: false
+          }
+        },
+
+        computed: {
+
+          results: function() {
+            threePointWords = [];
+            onePointWords = [];
+            letters = [];
+            for (var i = 0; i < this.cell.inputs.length; i++) {
+              letters.push(this.cell.inputs[i].letter.toLowerCase())
+            }
+            disallowed = new RegExp('[^'+letters+']', 'g');
+
+            for (var i = 0; i < wordlist.length; i++) {
+              word = wordlist[i];
+              if (word.includes(letters[0]) && !word.match(disallowed)) {
+
+                if (
+                  word.includes(letters[1]) &&
+                  word.includes(letters[2]) &&
+                  word.includes(letters[3]) &&
+                  word.includes(letters[4]) &&
+                  word.includes(letters[5]) &&
+                  word.includes(letters[6])) {
+                    threePointWords.push(word);
+                }
+                else {
+                  onePointWords.push(word);
+                }
+              }
+            }
+
+            return {
+              threePoint: {
+                words: threePointWords,
+                heading: 'Three-point words ('+threePointWords.length+'):'
+              },
+              onePoint: {
+                words: onePointWords,
+                heading: 'One-point words ('+onePointWords.length+'):'
+              }
+            };
+          }
+        },
+        methods: {
+          selectInput: function(i, e) {
+            document.getElementsByClassName('js-select-input')[i].select();
+          },
+
+          enterLetter: function(i, e) {
+            this.visible.results = false;
+            var input = e.target;
+            var initialValue = input.value;
+
+            if (input.value.match(/[A-Za-z]/g) && input.value.length === 1) {
+              if (i < 6) {
+                this.selectInput(i + 1);
+              }
+              else {
+                input.blur();
+              }
+            }
+            else {
+              input.value = '';
+            }
+          },
+
+          toggleVisible: function(section, e) {
+            e.preventDefault();
+            if (this.visible[section]) {
+              this.visible[section] = false;
+            }
+            else {
+              this.visible[section] = true;
+            }
+          }
+        }
+      });
+    </script>
+
+  </body>
+</html>

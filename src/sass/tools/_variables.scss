@@ -1,0 +1,44 @@
+// Modular scale
+$ms-base: rem(19);
+$ms-ratio: 1.5;
+
+
+// Common sizes
+$standard-spacing: ms(0);
+$header-height: ms(5);
+$content-max-width: ms(9);
+$icon-size: rem(48);
+
+
+// Colors
+$gray-1: transparentize(black, 0.15);
+$gray-2: transparentize(black, 0.7);
+$gray-3: transparentize(white, 0.15);
+
+$honey-1: hsl(44, 100%, 23%);
+$honey-2: hsl(44, 90%,  60%);
+$honey-3: hsl(44, 100%, 82%);
+$honey-4: hsl(44, 100%, 88%);
+
+
+$body-background: $honey-4;
+$body-text-color: $gray-1;
+$site-title-text-color: $body-text-color;
+$body-text-color-selected: $gray-3;
+$body-text-background-selected: $honey-1;
+
+$hr-color: $gray-2;
+
+$link-text-color: $honey-1;
+$link-text-color-hover: $gray-1;
+$link-background-hover: $honey-2;
+
+$button-background: $honey-3;
+$button-text-color: $body-text-color;
+$button-border-color: $honey-1;
+$button-background-hover: $honey-2;
+$button-text-color-hover: $gray-1;
+$button-border-color-hover: $honey-1;
+
+$cell-text-color: $button-text-color;
+$cell-text-color-selected: transparentize($cell-text-color, 0.6);
